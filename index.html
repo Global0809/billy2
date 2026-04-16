@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG Billy | Official Website</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600&family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* === CORE VARIABLES & SETUP === */
+        :root {
+            --bg-base: #030303;
+            --bg-surface: #0a0a0a;
+            --text-main: #f5f5f7;
+            --text-muted: #86868b;
+            --accent-white: #ffffff;
+            --accent-red-light: #ff3333;
+            --accent-red-dark: #8a0000;
+            --tesla-glow: rgba(255, 51, 51, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+            margin: 0;
+            overscroll-behavior: none;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* === CUSTOM SCROLLBAR === */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--accent-red-light), var(--accent-red-dark));
+            border-radius: 10px; border: 2px solid var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #ff5555, #a00000); }
+
+        /* === CUSTOM CURSOR === */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot {
+            width: 6px; height: 6px; background-color: var(--accent-red-light);
+            box-shadow: 0 0 10px var(--accent-red-light);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(255, 51, 51, 0.4);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease;
+        }
+        .cursor-hover .cursor-outline {
+            width: 70px; height: 70px; background-color: rgba(255, 51, 51, 0.05);
+            border-color: rgba(255, 51, 51, 0.8); backdrop-filter: blur(2px);
+        }
+
+        /* === ENTRY SCREEN === */
+        #entry-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-base); z-index: 9000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+        }
+        .btn-tesla {
+            background: transparent; color: var(--text-main); border: 1px solid rgba(255, 51, 51, 0.4);
+            padding: 1rem 3rem; font-family: 'Montserrat', sans-serif; text-transform: uppercase;
+            letter-spacing: 0.2em; font-size: 0.8rem; border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
+        }
+        .btn-tesla::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,51,51,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-tesla:hover {
+            border-color: var(--accent-red-light); box-shadow: 0 0 25px var(--tesla-glow);
+            background: rgba(255,51,51,0.05); transform: scale(1.02);
+        }
+        .btn-tesla:hover::before { left: 100%; }
+
+        /* === PARALLAX & HERO === */
+        .parallax-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%;
+            background: radial-gradient(circle at 50% 50%, #150505 0%, var(--bg-base) 70%);
+            z-index: -1; will-change: transform;
+        }
+        
+        /* HERO NETWORK CANVAS */
+        #hero-network-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; mix-blend-mode: screen; opacity: 1;
+        }
+
+        /* === 3D CYBER GRID BACKGROUND === */
+        .cyber-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 51, 51, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 51, 51, 0.1) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center bottom;
+            transform: perspective(600px) rotateX(60deg) translateY(-100px) translateZ(-250px);
+            animation: gridMove 15s linear infinite;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .cyber-grid::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, transparent 10%, var(--bg-base) 80%);
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(600px) rotateX(60deg) translateY(0) translateZ(-250px); }
+            100% { transform: perspective(600px) rotateX(60deg) translateY(60px) translateZ(-250px); }
+        }
+
+        /* === CREATIVE HERO TEXT (FUTURISTIC INTERACTIVE SPOTLIGHT) === */
+        .hero-title-wrap { z-index: 10; cursor: none; margin-bottom: 1rem; position: relative; padding: 20px; }
+        .hero-title-cyber {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 900; line-height: 1.1; letter-spacing: 0.05em;
+            color: transparent; -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+            position: relative; display: inline-block; text-transform: uppercase;
+            animation: heroFadeUp 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; transform: translateY(40px);
+            transform-style: preserve-3d; transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+        @keyframes heroFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* The glowing inner reveal mask */
+        .hero-title-cyber::before {
+            content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            color: #fff; -webkit-text-stroke: 0px transparent;
+            background: linear-gradient(135deg, #ffffff, #ff3333, #8a0000);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+            pointer-events: none;
+            filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.8));
+            z-index: 2;
+        }
+        .hero-title-wrap:hover .hero-title-cyber::before {
+            clip-path: circle(70px at var(--x) var(--y));
+        }
+
+        .hero-subtitle-badge {
+            display: inline-flex; align-items: center; gap: 0.8rem; padding: 0.5rem 1.5rem;
+            background: rgba(255,51,51,0.05);
+            border-left: 4px solid #ff3333; border-right: 4px solid #ff3333;
+            border-top: 1px solid rgba(255,51,51,0.2); border-bottom: 1px solid rgba(255,51,51,0.2);
+            position: relative; overflow: hidden; font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 20px rgba(255,51,51,0.15); transform: skew(-15deg);
+        }
+        .hero-subtitle-badge span {
+            transform: skew(15deg); display: inline-block;
+        }
+        .hero-subtitle-badge::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 30%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,51,51,0.6), transparent);
+            animation: scanBadge 3s infinite linear;
+            transform: skew(15deg);
+        }
+        @keyframes scanBadge { 100% { left: 200%; } }
+
+        /* EQUALIZER ANIMATIONS */
+        @keyframes eq { 0% { height: 20%; } 100% { height: 100%; } }
+        .eq-bar { width: 3px; background: #ff3333; border-radius: 2px; box-shadow: 0 0 5px #ff3333; }
+        .eq-paused .eq-bar { animation-play-state: paused; height: 10%; }
+
+        /* === ANIMATED GRADIENT BORDER === */
+        .gradient-border-animate {
+            background-size: 200% 200%;
+            animation: gradientBorderMove 4s ease infinite;
+        }
+        @keyframes gradientBorderMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* === WEBUI THUMBNAIL EFFECTS === */
+        .scanline-overlay {
+            position: absolute; inset: 0; pointer-events: none; z-index: 10;
+            background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.4) 2px, rgba(0,0,0,0.4) 4px);
+        }
+        
+        .scanner-beam {
+            position: absolute; top: -10%; left: 0; width: 100%; height: 4px;
+            background: rgba(255, 51, 51, 0.6);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.8), 0 0 20px rgba(255, 51, 51, 0.4);
+            z-index: 11; opacity: 0; pointer-events: none;
+        }
+        .group:hover .scanner-beam { opacity: 1; animation: scanBeam 2.5s linear infinite; }
+        @keyframes scanBeam { 0% { top: -10%; } 100% { top: 110%; } }
+
+        .tech-panel {
+            background: #0a0a0a;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            position: relative;
+            border: 1px solid rgba(255, 51, 51, 0.2);
+            transition: all 0.3s ease;
+        }
+        .group:hover .tech-panel { border-color: rgba(255, 51, 51, 0.6); }
+
+        .target-box::before, .target-box::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 2px solid transparent; transition: all 0.3s ease; pointer-events: none; z-index: 20;
+        }
+        .target-box::before { top: -2px; left: -2px; border-top-color: #ff3333; border-left-color: #ff3333; }
+        .target-box::after { bottom: -2px; right: -2px; border-bottom-color: #ff3333; border-right-color: #ff3333; }
+        .target-box:hover::before { top: 4px; left: 4px; width: 30px; height: 30px; }
+        .target-box:hover::after { bottom: 4px; right: 4px; width: 30px; height: 30px; }
+
+        /* === ECOSYSTEM REDESIGN (FUTURISTIC HUD) === */
+        .hud-card {
+            position: relative; background: rgba(10, 10, 10, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+            overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 4px;
+        }
+        .hud-card::before, .hud-card::after {
+            content: ''; position: absolute; width: 15px; height: 15px;
+            border-color: rgba(255, 255, 255, 0.3); border-style: solid; transition: all 0.4s;
+        }
+        .hud-card::before { top: 0; left: 0; border-width: 1px 0 0 1px; border-top-left-radius: 4px; }
+        .hud-card::after { bottom: 0; right: 0; border-width: 0 1px 1px 0; border-bottom-right-radius: 4px; }
+        
+        .hud-card:hover { 
+            border-color: var(--h-color); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px var(--h-glow);
+            transform: translateY(-5px);
+        }
+        .hud-card:hover::before, .hud-card:hover::after { 
+            border-color: var(--h-color); width: 25px; height: 25px; 
+        }
+        .hud-scanline {
+            position: absolute; top: -100%; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--h-color), transparent);
+            box-shadow: 0 0 10px var(--h-color); transition: top 0s; z-index: 5; opacity: 0;
+        }
+        .hud-card:hover .hud-scanline { opacity: 1; animation: hudScan 2s linear infinite; }
+        @keyframes hudScan { 0% { top: -10%; } 100% { top: 110%; } }
+
+        /* === FLOATING ICONS IN SUSPENDED SPACE === */
+        @keyframes floatIconSpace {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0px 0px rgba(0,0,0,0)); }
+            50% { transform: translateY(-12px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); }
+        }
+        .float-icon-layer {
+            animation: floatIconSpace 4s ease-in-out infinite;
+            will-change: transform, filter;
+        }
+        .float-delay-1 { animation-delay: 0s; }
+        .float-delay-2 { animation-delay: 0.6s; }
+        .float-delay-3 { animation-delay: 1.2s; }
+        .float-delay-4 { animation-delay: 1.8s; }
+        .float-delay-5 { animation-delay: 2.4s; }
+
+        /* === MAGNETIC ELEMENTS === */
+        .magnetic-wrap { perspective: 1000px; display: flex; justify-content: center; align-items: center; }
+        .magnetic-elem {
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d; will-change: transform;
+        }
+
+        /* === SCROLL ANIMATIONS === */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* === UI ORGANIZATION === */
+        .section-marker {
+            position: absolute; left: 0; top: 0;
+            font-family: 'Montserrat', sans-serif; font-size: 8rem; font-weight: 700;
+            color: rgba(255,255,255,0.02); line-height: 1; pointer-events: none; transform: translateY(-40%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px); transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255, 51, 51, 0.03); border-color: rgba(255, 51, 51, 0.3);
+            transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        /* Stable Icon Containers */
+        .icon-container {
+            display: flex; align-items: center; justify-content: center;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .icon-container i { font-size: 1.5rem; color: var(--text-muted); transition: all 0.3s ease; }
+        .icon-container:hover {
+            border-color: var(--accent-red-light); background: rgba(255,51,51,0.05);
+            box-shadow: 0 0 15px rgba(255,51,51,0.2);
+        }
+        .icon-container:hover i { color: var(--accent-white); transform: scale(1.2); }
+
+        /* === REACTIVE STATS GRAPH === */
+        .stat-row { margin-bottom: 2rem; }
+        .stat-label {
+            display: flex; justify-content: space-between; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem;
+        }
+        .stat-bar-bg {
+            width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; position: relative;
+        }
+        .stat-bar-fill {
+            height: 100%; width: 0%; border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent-red-dark), var(--accent-red-light));
+            box-shadow: 0 0 10px var(--accent-red-light); transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* === FIXED SCROLL INDICATOR === */
+        #scroll-tracker {
+            position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            z-index: 100; mix-blend-mode: difference;
+        }
+        .scroll-line { width: 1px; height: 100px; background: rgba(255,255,255,0.2); position: relative; }
+        .scroll-progress { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: var(--accent-red-light); }
+        
+        /* === AI CANVAS === */
+        #ai-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="interactive-area">
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- FIXED SCROLL PERCENTAGE -->
+    <div id="scroll-tracker">
+        <span class="text-[10px] font-display text-white tracking-widest" style="writing-mode: vertical-rl; transform: rotate(180deg);">SCROLL</span>
+        <div class="scroll-line"><div class="scroll-progress" id="scroll-bar-fill"></div></div>
+        <span id="scroll-pct" class="text-xs font-mono text-[#ff3333]">0%</span>
+    </div>
+
+    <!-- ENTRY SCREEN (For Audio Context) -->
+    <div id="entry-screen">
+        <h2 class="text-xs tracking-[0.4em] mb-8 text-gray-500 font-display">SYSTEM READY</h2>
+        <button id="enter-btn" class="btn-tesla interactive-elem">Initialize Network</button>
+        <p class="text-[10px] text-[#ff3333] mt-6 tracking-widest uppercase font-mono animate-pulse">Audio & Visual Modules Loaded</p>
+    </div>
+
+    <!-- MAIN WRAPPER -->
+    <div id="main-content" style="display: none;">
+        
+        <!-- 01: HERO SECTION -->
+        <section class="relative min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden border-b border-white/5" id="hero-section">
+            <div class="parallax-bg" id="hero-bg"></div>
+            
+            <!-- 3D Cyber Grid -->
+            <div class="cyber-grid"></div>
+
+            <!-- Hero Network Particle Canvas -->
+            <canvas id="hero-network-canvas"></canvas>
+            
+            <!-- Left Interactive HUD Panels -->
+            <div class="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-6 z-20">
+                <div class="glass-card p-5 rounded-xl magnetic-wrap interactive-elem w-56 cursor-none border border-white/5 hover:border-[#ff3333]/40">
+                    <div class="magnetic-elem flex flex-col gap-2">
+                        <span class="text-[10px] font-mono text-[#ff3333] tracking-widest uppercase flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-[#ff3333] rounded-full animate-ping"></span> Sys.Monitor
+                        </span>
+                        <div class="flex items-end gap-1.5 h-8 mt-2">
+                            <div class="w-full bg-[#ff3333] rounded-t-sm opacity-80 animate-[eq_0.5s_ease-in-out_infinite_alternate]" style="height: 40%"></div>
+                            <div class="w-full bg-[#ff3333] rounded-t-sm opacity-60 animate-[eq_0.8s_ease-in-out_infinite_alternate]" style="height: 80%"></div>
+                            <div class="w-full bg-[#ff3333] rounded-t-sm opacity-100 animate-[eq_0.6s_ease-in-out_infinite_alternate]" style="height: 60%"></div>
+                            <div class="w-full bg-[#ff3333] rounded-t-sm opacity-50 animate-[eq_1.0s_ease-in-out_infinite_alternate]" style="height: 100%"></div>
+                            <div class="w-full bg-[#ff3333] rounded-t-sm opacity-70 animate-[eq_0.7s_ease-in-out_infinite_alternate]" style="height: 50%"></div>
+                        </div>
+                        <span class="text-[9px] font-mono text-gray-500 uppercase mt-2 border-t border-white/10 pt-2">Aural Engine Active</span>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-5 rounded-xl magnetic-wrap interactive-elem w-56 cursor-none border border-white/5 hover:border-[#ff3333]/40">
+                    <div class="magnetic-elem flex flex-col gap-1">
+                        <span class="text-[10px] font-mono text-[#ff3333] tracking-widest uppercase">Network Ping</span>
+                        <div class="text-3xl font-display text-white mt-1">14<span class="text-sm text-gray-500 ml-1">ms</span></div>
+                        <span class="text-[9px] font-mono text-gray-500 uppercase mt-2 border-t border-white/10 pt-2">Global Uplink: Optimal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Interactive Quick Access -->
+            <div class="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-6 z-20">
+                <a href="#popular-section" class="glass-card p-5 rounded-xl magnetic-wrap interactive-elem w-56 group cursor-none border border-white/5 hover:border-[#ff3333]/40">
+                    <div class="magnetic-elem flex flex-col gap-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-mono text-[#ff3333] tracking-widest uppercase">Quick Access</span>
+                            <i class="fa-solid fa-arrow-right text-gray-600 group-hover:text-white transition-colors text-xs -rotate-45"></i>
+                        </div>
+                        <span class="text-base font-display text-white mt-2 group-hover:text-[#ff3333] transition-colors">POPULAR HITS</span>
+                        <div class="w-full h-[2px] bg-white/10 mt-3 relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-[#ff3333] w-0 group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#ecosystem-section" class="glass-card p-5 rounded-xl magnetic-wrap interactive-elem w-56 group cursor-none border border-white/5 hover:border-[#ff3333]/40">
+                    <div class="magnetic-elem flex flex-col gap-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-mono text-[#ff3333] tracking-widest uppercase">System Nodes</span>
+                            <i class="fa-solid fa-arrow-right text-gray-600 group-hover:text-white transition-colors text-xs -rotate-45"></i>
+                        </div>
+                        <span class="text-base font-display text-white mt-2 group-hover:text-[#ff3333] transition-colors">THE ECOSYSTEM</span>
+                        <div class="w-full h-[2px] bg-white/10 mt-3 relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-[#ff3333] w-0 group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="z-10 text-center flex flex-col items-center">
+                
+                <!-- Futuristic Badge Subtitle -->
+                <div class="hero-subtitle-badge mb-8 reveal active delay-100 parallax-element" data-speed="0.1">
+                    <div class="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse"></div>
+                    <span class="text-[10px] md:text-xs tracking-[0.4em] text-white font-bold uppercase">SONIC ARCHITECT</span>
+                </div>
+                
+                <!-- Futuristic Cyberpunk Title -->
+                <div class="hero-title-wrap interactive-elem parallax-element" data-speed="0.05">
+                    <h1 class="hero-title-cyber" data-text="SG BILLY">SG BILLY</h1>
+                </div>
+                
+                <!-- Interactive Decoding Subtitle -->
+                <h2 class="text-sm md:text-xl tracking-[0.6em] text-gray-400 font-light reveal active delay-300 font-display parallax-element decode-text interactive-elem" data-speed="0.15" data-value="Breaking the Sound Barrier">Breaking the Sound Barrier</h2>
+                
+                <!-- Magnetic Scroll Indicator -->
+                <div class="mt-24 opacity-70 parallax-element flex flex-col items-center" data-speed="-0.1">
+                    <span class="text-[9px] font-mono tracking-widest text-gray-500 mb-4 uppercase">Scroll to Interface</span>
+                    <div class="magnetic-wrap w-16 h-16 rounded-full border border-white/10 flex items-center justify-center interactive-elem">
+                        <div class="magnetic-elem w-2 h-2 bg-[#ff3333] rounded-full shadow-[0_0_10px_#ff3333] animate-bounce"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Audio Engine Toggle -->
+            <div id="audio-toggle" class="absolute bottom-10 left-6 md:left-12 flex items-center gap-4 interactive-elem p-4 rounded-full border border-white/5 bg-white/5 backdrop-blur-md transition-all hover:bg-white/10 hover:border-[#ff3333]/50 cursor-none z-50">
+                <div class="flex items-end h-4 gap-[3px]" id="eq-container">
+                    <div class="eq-bar animate-[eq_0.8s_ease-in-out_infinite_alternate]"></div>
+                    <div class="eq-bar animate-[eq_1.2s_ease-in-out_infinite_alternate_0.2s]"></div>
+                    <div class="eq-bar animate-[eq_0.9s_ease-in-out_infinite_alternate_0.4s]"></div>
+                    <div class="eq-bar animate-[eq_1.5s_ease-in-out_infinite_alternate_0.1s]"></div>
+                </div>
+                <span class="text-[9px] font-mono tracking-widest text-gray-300 uppercase" id="audio-status-text">Network: On</span>
+            </div>
+        </section>
+
+        <!-- 02: ARTIST IDENTITY (INTERACTIVE DOSSIER) -->
+        <section class="py-32 px-6 md:px-12 relative z-10 border-b border-white/5 overflow-hidden">
+            <div class="max-w-7xl mx-auto relative">
+                <div class="section-marker">01</div>
+                
+                <div class="text-center mb-20 reveal">
+                    <h2 class="text-2xl md:text-4xl">Artist Identity</h2>
+                    <p class="text-xs tracking-widest mt-4 text-[#ff3333] font-mono">VISIONARY SOUND ARCHITECT</p>
+                </div>
+
+                <div class="flex justify-center reveal delay-200">
+                    <!-- 3D Interactive Dossier Card -->
+                    <div class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full max-w-4xl p-[2px] magnetic-wrap" style="perspective: 1500px;">
+                        
+                        <!-- Animated Gradient Border -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#ff3333] to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-500 gradient-border-animate"></div>
+
+                        <div class="magnetic-elem w-full bg-[#0a0a0a] rounded-xl p-8 md:p-12 relative overflow-hidden">
+                            <!-- Background Accent Glow -->
+                            <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#ff3333] rounded-full blur-[100px] opacity-5 group-hover:opacity-20 transition-opacity duration-700"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+                                
+                                <!-- Description Side -->
+                                <div>
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <div class="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse"></div>
+                                        <span class="text-[10px] font-mono tracking-widest text-[#ff3333] uppercase">GLOBAL NETWORK</span>
+                                    </div>
+                                    <h3 class="text-3xl md:text-5xl font-display font-bold text-white mb-6">SG <span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.6);">BILLY</span></h3>
+                                    
+                                    <p class="text-sm leading-relaxed text-gray-400 mb-6 font-light">
+                                        SG Billy is a visionary artist and sonic architect, dedicated to pushing the boundaries of modern music. Blending raw, unfiltered lyricism with infectious, high-energy rhythms, he creates a soundscape that is undeniably his own.
+                                    </p>
+                                    <p class="text-sm leading-relaxed text-gray-400 font-light">
+                                        With a rapidly growing digital footprint across all major platforms, SG Billy maintains a relentless commitment to authenticity, delivering premium auditory and visual experiences to his dedicated global fanbase.
+                                    </p>
+                                </div>
+                                
+                                <!-- Interactive Stats Grid Side -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 flex flex-col justify-center items-center text-center group-hover:bg-[#ff3333]/10 group-hover:border-[#ff3333]/30 transition-colors duration-500 shadow-lg">
+                                        <i class="fa-solid fa-users text-2xl text-gray-500 group-hover:text-[#ff3333] mb-3 transition-colors duration-500"></i>
+                                        <span class="text-2xl font-display font-bold text-white mb-1">500K+</span>
+                                        <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Monthly Streams</span>
+                                    </div>
+                                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 flex flex-col justify-center items-center text-center group-hover:bg-[#ff3333]/10 group-hover:border-[#ff3333]/30 transition-colors duration-500 shadow-lg">
+                                        <i class="fa-solid fa-globe text-2xl text-gray-500 group-hover:text-[#ff3333] mb-3 transition-colors duration-500"></i>
+                                        <span class="text-2xl font-display font-bold text-white mb-1">10M+</span>
+                                        <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Global Views</span>
+                                    </div>
+                                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 flex flex-col justify-center items-center text-center group-hover:bg-[#ff3333]/10 group-hover:border-[#ff3333]/30 transition-colors duration-500 shadow-lg">
+                                        <i class="fa-solid fa-network-wired text-2xl text-gray-500 group-hover:text-[#ff3333] mb-3 transition-colors duration-500"></i>
+                                        <span class="text-2xl font-display font-bold text-white mb-1">5+</span>
+                                        <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Digital Nodes</span>
+                                    </div>
+                                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 flex flex-col justify-center items-center text-center group-hover:bg-[#ff3333]/10 group-hover:border-[#ff3333]/30 transition-colors duration-500 shadow-lg">
+                                        <i class="fa-solid fa-bolt text-2xl text-gray-500 group-hover:text-[#ff3333] mb-3 transition-colors duration-500"></i>
+                                        <span class="text-2xl font-display font-bold text-white mb-1">2024</span>
+                                        <span class="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Era Defined</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Sci-Fi Scanline -->
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ff3333] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03: AI METRICS & DATA GRAPH -->
+        <section class="py-32 px-6 relative z-10 bg-[#050101] overflow-hidden border-b border-white/5">
+            <canvas id="ai-canvas"></canvas>
+            
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="section-marker text-[rgba(255,51,51,0.03)]">02</div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="reveal glass-card p-8 border-[#ff3333]/20">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-2 h-2 rounded-full bg-[#ff3333] animate-pulse"></div>
+                            <span class="text-xs font-mono text-[#ff3333] tracking-widest">AURAL ANALYSIS ENGINE</span>
+                        </div>
+                        <div class="font-mono text-sm text-gray-300 leading-loose min-h-[150px]" id="ai-typewriter"></div>
+                    </div>
+
+                    <div class="reveal delay-200" id="stats-container">
+                        <h3 class="font-display text-xl mb-10 tracking-[0.2em]">Empire Metrics</h3>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Sonic Velocity</span><span class="text-[#ff3333]">98%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Visual Production Quality</span><span class="text-[#ff3333]">100%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="100%" style="transition-delay: 0.1s"></div></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Audience Retention</span><span class="text-[#ff3333]">94%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="94%" style="transition-delay: 0.2s"></div></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label"><span>Algorithmic Growth</span><span class="text-[#ff3333]">97%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="97%" style="transition-delay: 0.3s"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04: MOST RECENT WORK (YOUTUBE SHOWCASE) -->
+        <section class="py-32 px-6 relative z-10 bg-[#030303] overflow-hidden border-b border-white/5">
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="section-marker right-0 text-right">03</div>
+                
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-2xl md:text-4xl">Most Recent Work</h2>
+                    <p class="text-xs tracking-widest mt-4 text-[#ff3333] font-mono">LATEST CINEMATIC VISION</p>
+                </div>
+
+                <div class="flex justify-center reveal delay-200">
+                    <!-- YouTube Integration Card (LATEST DROP) - WEBUI REDESIGN -->
+                    <a href="https://youtu.be/1LCm4PuzLcw?si=2lWtARsIOT4JKmom" target="_blank" class="relative group interactive-elem w-full max-w-5xl aspect-video border border-[#ff3333]/40 hover:border-[#ff3333] transition-colors duration-500 block bg-black overflow-hidden">
+                        
+                        <div class="scanline-overlay"></div>
+                        <div class="scanner-beam"></div>
+                        
+                        <!-- Top Left Recording Indicator -->
+                        <div class="absolute top-6 left-6 z-20 flex items-start gap-3">
+                            <div class="w-1 h-8 bg-[#ff3333] animate-pulse"></div>
+                            <span class="font-mono text-[9px] text-white/70 tracking-widest mt-1">REC.ID - TRANSMISSION</span>
+                        </div>
+                        
+                        <!-- Image -->
+                        <img src="https://img.youtube.com/vi/1LCm4PuzLcw/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/1LCm4PuzLcw/hqdefault.jpg';" alt="Recent Work" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                        
+                        <!-- Center Play Button (WebUI Style) -->
+                        <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                            <div class="w-20 h-14 border border-[#ff3333] bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#ff3333]/20 transition-all shadow-[0_0_20px_rgba(255,51,51,0.2)]">
+                                <i class="fa-solid fa-play text-xl text-white ml-1"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Bottom Info Bar -->
+                        <div class="absolute bottom-0 left-0 w-full p-6 border-t border-[#ff3333]/40 bg-black/80 backdrop-blur-md flex justify-between items-end z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                            <div>
+                                <span class="font-mono text-[#ff3333] text-[10px] block mb-2 tracking-widest">OFFICIAL VISUAL</span>
+                                <h3 class="font-display text-2xl md:text-3xl text-white tracking-widest">LATEST TRANSMISSION</h3>
+                            </div>
+                            <div class="font-mono text-[10px] border border-white/20 px-3 py-1.5 text-gray-400 bg-white/5">
+                                [YOUTUBE_SRC]
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05: MOST POPULAR WORK (Dark Neon Neurons Background) -->
+        <section id="popular-section" class="py-32 px-6 relative z-10 border-b border-white/5 overflow-hidden bg-[#030303]">
+            
+            <!-- Dark Neon Neurons Canvas Background -->
+            <canvas id="neuron-canvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-90"></canvas>
+
+            <div class="max-w-7xl mx-auto relative text-center z-10">
+                <div class="section-marker mx-auto text-center w-full">04</div>
+                
+                <div class="reveal mb-16 relative z-10">
+                    <h2 class="text-2xl md:text-4xl">Most Popular Work</h2>
+                    <div class="w-[1px] h-16 bg-white opacity-20 mx-auto mt-8"></div>
+                    <p class="text-xs tracking-widest mt-8 text-[#ff3333] font-mono">VISUAL BROADCASTS</p>
+                </div>
+
+                <!-- 2-Column Video Grid for SG Billy - WEBUI REDESIGN -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto reveal delay-200 p-2">
+                    
+                    <!-- Video 1: avswN6yLOdo -->
+                    <a href="https://youtu.be/avswN6yLOdo?si=KxhRD9E1ZR6Kez_n" target="_blank" class="block target-box group interactive-elem">
+                        <div class="tech-panel aspect-video w-full h-full relative overflow-hidden">
+                            <div class="scanline-overlay"></div>
+                            <div class="scanner-beam"></div>
+                            
+                            <img src="https://img.youtube.com/vi/avswN6yLOdo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/avswN6yLOdo/hqdefault.jpg';" alt="Popular Project" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-[1.05] transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                            
+                            <!-- Top Right Badge -->
+                            <div class="absolute top-4 right-4 font-mono text-[9px] text-[#ff3333] border border-[#ff3333]/40 px-3 py-1.5 bg-black/60 backdrop-blur-sm z-20">
+                                // SG.BILLY
+                            </div>
+                            
+                            <!-- Bottom Left Play Area -->
+                            <div class="absolute bottom-5 left-5 flex items-center gap-3 z-20">
+                                <i class="fa-solid fa-circle-play text-[#ff3333] text-2xl group-hover:shadow-[0_0_15px_#ff3333] rounded-full transition-all bg-black/50"></i>
+                                <span class="font-mono text-[10px] text-gray-400 tracking-widest group-hover:text-white transition-colors">ACCESS_FILE</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Video 2: WxUwhziL_DA -->
+                    <a href="https://youtu.be/WxUwhziL_DA?si=G78c0MgnDV19UgRa" target="_blank" class="block target-box group interactive-elem">
+                        <div class="tech-panel aspect-video w-full h-full relative overflow-hidden">
+                            <div class="scanline-overlay"></div>
+                            <div class="scanner-beam"></div>
+                            
+                            <img src="https://img.youtube.com/vi/WxUwhziL_DA/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/WxUwhziL_DA/hqdefault.jpg';" alt="Popular Project" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-[1.05] transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                            
+                            <div class="absolute top-4 right-4 font-mono text-[9px] text-[#ff3333] border border-[#ff3333]/40 px-3 py-1.5 bg-black/60 backdrop-blur-sm z-20">
+                                // SG.BILLY
+                            </div>
+                            
+                            <div class="absolute bottom-5 left-5 flex items-center gap-3 z-20">
+                                <i class="fa-solid fa-circle-play text-[#ff3333] text-2xl group-hover:shadow-[0_0_15px_#ff3333] rounded-full transition-all bg-black/50"></i>
+                                <span class="font-mono text-[10px] text-gray-400 tracking-widest group-hover:text-white transition-colors">ACCESS_FILE</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 06: THE ECOSYSTEM (Velvet Background) -->
+        <section id="ecosystem-section" class="py-32 px-6 relative z-10 border-b border-white/5 overflow-hidden bg-[#030303]">
+            
+            <!-- Flowing Velvet Canvas Background -->
+            <canvas class="velvet-bg absolute inset-0 w-full h-full z-0 pointer-events-none opacity-80"></canvas>
+
+            <div class="max-w-7xl mx-auto relative text-center z-10">
+                <div class="section-marker mx-auto text-center w-full">05</div>
+                
+                <div class="reveal mb-20 relative z-10">
+                    <h2 class="text-2xl md:text-4xl">The Ecosystem</h2>
+                    <div class="w-[1px] h-16 bg-white opacity-20 mx-auto mt-8"></div>
+                    <p class="text-xs tracking-widest mt-8 text-gray-500 font-mono">GLOBAL TRANSMISSION NODES</p>
+                </div>
+
+                <!-- 5-Node Interactive 3D Grid using Flex Wrap -->
+                <div class="flex flex-wrap justify-center gap-6 reveal relative z-10">
+                    
+                    <!-- Spotify Node -->
+                    <a href="https://open.spotify.com/artist/5zIEwYDOqVYviypDTNE0yH?si=huisSFJETvu_5-_ex14fQg" target="_blank" style="--h-color: #1DB954; perspective: 1500px;" class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full sm:w-[calc(50%-1.5rem)] lg:w-[240px] p-[2px] magnetic-wrap h-64 float-delay-1">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#1DB954] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 gradient-border-animate"></div>
+                        <div class="magnetic-elem w-full h-full bg-[#0a0a0a] rounded-[10px] p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                            <div class="absolute -top-16 -right-16 w-32 h-32 bg-[#1DB954] rounded-full blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-700"></div>
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1DB954] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/50 group-hover:bg-[#1DB954]/10 group-hover:border-[#1DB954]/50 transition-all duration-500 shadow-lg mb-2 float-icon-layer">
+                                    <i class="fa-brands fa-spotify text-3xl text-gray-400 group-hover:text-[#1DB954] group-hover:scale-110 transition-all duration-300"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white tracking-widest mt-2">SPOTIFY</h3>
+                                <span class="text-[9px] font-mono text-gray-500 group-hover:text-[#1DB954] transition-colors duration-300">// AUDIO ARCHIVE</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Snapchat Node -->
+                    <a href="https://www.snapchat.com/@sgb1lly?sender_web_id=b4cf1d39-07c2-4376-bb4b-9a4f221736d6&device_type=ios&is_copy_url=true" target="_blank" style="--h-color: #FFFC00; perspective: 1500px;" class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full sm:w-[calc(50%-1.5rem)] lg:w-[240px] p-[2px] magnetic-wrap h-64 float-delay-2">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFFC00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 gradient-border-animate"></div>
+                        <div class="magnetic-elem w-full h-full bg-[#0a0a0a] rounded-[10px] p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                            <div class="absolute -top-16 -right-16 w-32 h-32 bg-[#FFFC00] rounded-full blur-[50px] opacity-5 group-hover:opacity-20 transition-opacity duration-700"></div>
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#FFFC00] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/50 group-hover:bg-[#FFFC00]/10 group-hover:border-[#FFFC00]/50 transition-all duration-500 shadow-lg mb-2 float-icon-layer">
+                                    <i class="fa-brands fa-snapchat text-3xl text-gray-400 group-hover:text-[#FFFC00] group-hover:scale-110 transition-all duration-300"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white tracking-widest mt-2">SNAPCHAT</h3>
+                                <span class="text-[9px] font-mono text-gray-500 group-hover:text-[#FFFC00] transition-colors duration-300">// DAILY FEED</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- TikTok Node -->
+                    <a href="https://www.tiktok.com/@sgbilly?_r=1&_t=ZT-955KIlZEpzR" target="_blank" style="--h-color: #ffffff; perspective: 1500px;" class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full sm:w-[calc(50%-1.5rem)] lg:w-[240px] p-[2px] magnetic-wrap h-64 float-delay-3">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 gradient-border-animate"></div>
+                        <div class="magnetic-elem w-full h-full bg-[#0a0a0a] rounded-[10px] p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                            <div class="absolute -top-16 -right-16 w-32 h-32 bg-[#ffffff] rounded-full blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-700"></div>
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/50 group-hover:bg-white/10 group-hover:border-white/50 transition-all duration-500 shadow-lg mb-2 float-icon-layer">
+                                    <i class="fa-brands fa-tiktok text-3xl text-gray-400 group-hover:text-white group-hover:scale-110 transition-all duration-300"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white tracking-widest mt-2">TIKTOK</h3>
+                                <span class="text-[9px] font-mono text-gray-500 group-hover:text-white transition-colors duration-300">// VIRAL NET</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Instagram Node -->
+                    <a href="https://www.instagram.com/sgbilly_/" target="_blank" style="--h-color: #E1306C; perspective: 1500px;" class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full sm:w-[calc(50%-1.5rem)] lg:w-[240px] p-[2px] magnetic-wrap h-64 float-delay-4">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#E1306C] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 gradient-border-animate"></div>
+                        <div class="magnetic-elem w-full h-full bg-[#0a0a0a] rounded-[10px] p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                            <div class="absolute -top-16 -right-16 w-32 h-32 bg-[#E1306C] rounded-full blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-700"></div>
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#E1306C] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/50 group-hover:bg-[#E1306C]/10 group-hover:border-[#E1306C]/50 transition-all duration-500 shadow-lg mb-2 float-icon-layer">
+                                    <i class="fa-brands fa-instagram text-3xl text-gray-400 group-hover:text-[#E1306C] group-hover:scale-110 transition-all duration-300"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white tracking-widest mt-2">INSTAGRAM</h3>
+                                <span class="text-[9px] font-mono text-gray-500 group-hover:text-[#E1306C] transition-colors duration-300">// VISUAL DIARY</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- YouTube Node -->
+                    <a href="https://m.youtube.com/@sgbilly_" target="_blank" style="--h-color: #FF0000; perspective: 1500px;" class="glass-card relative group interactive-elem rounded-2xl overflow-hidden w-full sm:w-[calc(50%-1.5rem)] lg:w-[240px] p-[2px] magnetic-wrap h-64 float-delay-5">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#FF0000] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 gradient-border-animate"></div>
+                        <div class="magnetic-elem w-full h-full bg-[#0a0a0a] rounded-[10px] p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                            <div class="absolute -top-16 -right-16 w-32 h-32 bg-[#FF0000] rounded-full blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-700"></div>
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#FF0000] to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[hudScan_2s_linear_infinite] pointer-events-none"></div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-black/50 group-hover:bg-[#FF0000]/10 group-hover:border-[#FF0000]/50 transition-all duration-500 shadow-lg mb-2 float-icon-layer">
+                                    <i class="fa-brands fa-youtube text-3xl text-gray-400 group-hover:text-[#FF0000] group-hover:scale-110 transition-all duration-300"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white tracking-widest mt-2">YOUTUBE</h3>
+                                <span class="text-[9px] font-mono text-gray-500 group-hover:text-[#FF0000] transition-colors duration-300">// BROADCASTING</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 07: FOOTER -->
+        <section class="py-24 px-6 bg-gradient-to-b from-transparent to-[#080101]">
+            <footer class="pt-12 text-center flex flex-col items-center">
+                <p class="text-[10px] font-mono tracking-[0.2em] text-gray-600 mb-4">
+                    © <span id="year"></span> SG BILLY
+                </p>
+                <div class="interactive-elem group cursor-none inline-flex items-center gap-2 mt-2">
+                    <div class="w-1 h-1 bg-[#ff3333] rounded-full group-hover:animate-ping"></div>
+                    <p class="text-[9px] font-display tracking-[0.4em] text-gray-500 group-hover:text-white transition-colors duration-500 border-b border-transparent group-hover:border-white/30 pb-1">
+                        COLLABORATION WITH AICANFEEL
+                    </p>
+                </div>
+            </footer>
+        </section>
+    </div>
+
+    <!-- INTERNAL SCRIPTS -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        let lastScrollY = window.scrollY;
+        
+        /* === SOUND ENGINE === */
+        let audioCtx; let droneOscillator; let droneGain;
+        let isAudioMuted = false;
+
+        function initAudio() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            droneOscillator = audioCtx.createOscillator();
+            droneOscillator.type = 'sawtooth'; 
+            droneGain = audioCtx.createGain();
+            droneGain.gain.value = 0; 
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass'; filter.frequency.value = 150; 
+            droneOscillator.connect(filter); filter.connect(droneGain); droneGain.connect(audioCtx.destination);
+            droneOscillator.start();
+            droneGain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 3.0);
+            window.audioFilter = filter;
+        }
+
+        /* === AUDIO TOGGLE LOGIC === */
+        const audioToggleBtn = document.getElementById('audio-toggle');
+        const eqContainer = document.getElementById('eq-container');
+        const audioStatusText = document.getElementById('audio-status-text');
+
+        audioToggleBtn.addEventListener('click', () => {
+            if(!audioCtx) return;
+            isAudioMuted = !isAudioMuted;
+            
+            if(isAudioMuted) {
+                droneGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.5);
+                eqContainer.classList.add('eq-paused');
+                audioStatusText.textContent = 'Network: Off';
+                audioStatusText.style.color = '#86868b';
+            } else {
+                droneGain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.5);
+                eqContainer.classList.remove('eq-paused');
+                audioStatusText.textContent = 'Network: On';
+                audioStatusText.style.color = '#d1d5db';
+            }
+            playHoverSound();
+        });
+
+        function playHoverSound() {
+            if (!audioCtx || isAudioMuted) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        /* === MAGNETIC ELEMENTS 3D LOGIC === */
+        const magneticWraps = document.querySelectorAll('.magnetic-wrap');
+        magneticWraps.forEach(wrap => {
+            const elem = wrap.querySelector('.magnetic-elem');
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                // Move and tilt element toward mouse cursor
+                elem.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) rotateX(${-y*0.3}deg) rotateY(${x*0.3}deg)`;
+            });
+            wrap.addEventListener('mouseleave', () => {
+                elem.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg)`;
+            });
+        });
+
+        /* === 3D HERO TITLE LOGIC === */
+        const heroTitleWrap = document.querySelector('.hero-title-wrap');
+        const heroTitle3D = document.querySelector('.hero-title-cyber');
+        
+        if (heroTitleWrap && heroTitle3D) {
+            heroTitleWrap.addEventListener('mousemove', (e) => {
+                // Measure from the static wrapper to prevent transform jitter/feedback loop
+                const rect = heroTitleWrap.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Update CSS variables for the spotlight mask instantly
+                heroTitle3D.style.setProperty('--x', `${x}px`);
+                heroTitle3D.style.setProperty('--y', `${y}px`);
+
+                // Subtle 3D tilt calculated from wrapper center
+                const tiltX = e.clientX - rect.left - rect.width / 2;
+                const tiltY = e.clientY - rect.top - rect.height / 2;
+                heroTitle3D.style.transform = `rotateX(${-tiltY * 0.03}deg) rotateY(${tiltX * 0.03}deg)`;
+            });
+            heroTitleWrap.addEventListener('mouseleave', () => {
+                heroTitle3D.style.transform = `rotateX(0deg) rotateY(0deg)`;
+            });
+        }
+
+        /* === INTERACTIVE DECODING TEXT === */
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        document.querySelectorAll('.decode-text').forEach(el => {
+            el.addEventListener('mouseenter', event => {
+                let iterations = 0;
+                const target = event.target;
+                const originalText = target.dataset.value;
+                if (!originalText) return;
+                
+                // Play sound effect on hover
+                playHoverSound();
+
+                clearInterval(target.decodeInterval);
+                
+                target.decodeInterval = setInterval(() => {
+                    target.innerText = originalText.split("")
+                        .map((letter, index) => {
+                            if(index < iterations || letter === " ") {
+                                return originalText[index];
+                            }
+                            return letters[Math.floor(Math.random() * letters.length)]
+                        })
+                        .join("");
+                    
+                    if(iterations >= originalText.length){ 
+                        clearInterval(target.decodeInterval);
+                    }
+                    iterations += 1 / 3;
+                }, 30);
+            });
+        });
+
+        /* === AI TYPEWRITER === */
+        const aiText = "> Analyzing origin node: Global Network...\n> Channel established: SG Billy Sector...\n> Scanning auditory data: High-voltage rhythm detected...\n> Entity recognized: Sonic Architect\n> SG Billy initialized.";
+        let i = 0;
+        function typeWriter() {
+            if (i < aiText.length) {
+                const el = document.getElementById("ai-typewriter");
+                el.innerHTML += aiText.charAt(i) === '\n' ? '<br>' : aiText.charAt(i);
+                i++; setTimeout(typeWriter, Math.random() * 50 + 20);
+            }
+        }
+
+        /* === ENTRY SEQUENCE === */
+        const entryScreen = document.getElementById('entry-screen');
+        const mainContent = document.getElementById('main-content');
+        const enterBtn = document.getElementById('enter-btn');
+
+        enterBtn.addEventListener('click', () => {
+            initAudio(); playHoverSound();
+            entryScreen.style.opacity = '0';
+            setTimeout(() => {
+                entryScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                window.dispatchEvent(new Event('resize'));
+                initCanvas(); 
+                initHeroNetwork(); 
+                initVelvet(); // Initialize velvet background
+                initNeurons(); // Initialize dark neon neurons
+            }, 1500);
+        });
+
+        /* === CURSOR TRACKING === */
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let outlineX = mouseX, outlineY = mouseY;
+        let isMouseMoving = false;
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isMouseMoving) {
+                window.requestAnimationFrame(() => {
+                    mouseX = e.clientX; mouseY = e.clientY;
+                    cursorDot.style.left = `${mouseX}px`; cursorDot.style.top = `${mouseY}px`;
+                    isMouseMoving = false;
+                });
+                isMouseMoving = true;
+            }
+        });
+
+        function animateCursor() {
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+            cursorOutline.style.left = `${outlineX}px`; cursorOutline.style.top = `${outlineY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('a, button, .interactive-elem').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('cursor-hover');
+                if(el !== enterBtn && el.id !== 'audio-toggle') playHoverSound();
+            });
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        /* === SCROLL & PARALLAX === */
+        const scrollPctEl = document.getElementById('scroll-pct');
+        const scrollBarFill = document.getElementById('scroll-bar-fill');
+        const heroBg = document.getElementById('hero-bg');
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        let isScrolling = false;
+
+        window.addEventListener('scroll', () => {
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    
+                    let scrollPercent = maxScroll > 0 ? (scrollY / maxScroll) * 100 : 0;
+                    scrollPctEl.textContent = `${Math.round(scrollPercent)}%`;
+                    scrollBarFill.style.height = `${scrollPercent}%`;
+                    
+                    if (heroBg) heroBg.style.transform = `translateY(${scrollY * 0.4}px)`;
+                    parallaxElements.forEach(el => {
+                        const speed = el.getAttribute('data-speed') || 0.2;
+                        el.style.transform = `translateY(${scrollY * speed}px)`;
+                    });
+
+                    if (audioCtx && window.audioFilter && !isAudioMuted) {
+                        let speed = Math.abs(scrollY - lastScrollY);
+                        let targetFreq = 150 + Math.min(speed * 10, 800); 
+                        window.audioFilter.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.1);
+                        clearTimeout(window.scrollAudioTimer);
+                        window.scrollAudioTimer = setTimeout(() => {
+                            window.audioFilter.frequency.setTargetAtTime(150, audioCtx.currentTime, 0.5);
+                        }, 50);
+                    }
+                    lastScrollY = scrollY;
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        });
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const graphFills = document.querySelectorAll('.stat-bar-fill');
+        let aiTyped = false;
+
+        const mainObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if (entry.target.querySelector('#ai-typewriter') && !aiTyped) {
+                        aiTyped = true; setTimeout(typeWriter, 500);
+                    }
+                    if (entry.target.id === 'stats-container') {
+                        graphFills.forEach(bar => bar.style.width = bar.getAttribute('data-width'));
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        revealElements.forEach(el => mainObserver.observe(el));
+
+        /* === HERO NETWORK CANVAS PARTICLES === */
+        const heroCanvas = document.getElementById('hero-network-canvas');
+        const heroCtx = heroCanvas ? heroCanvas.getContext('2d') : null;
+        let heroParticles = [];
+        let shockwaves = []; // Array to store kinetic click shockwaves
+
+        function initHeroNetwork() {
+            if(!heroCanvas) return;
+            resizeHeroCanvas();
+            window.addEventListener('resize', resizeHeroCanvas);
+            
+            // Standard particles
+            for(let i=0; i<150; i++) {
+                heroParticles.push({
+                    x: Math.random() * heroCanvas.width,
+                    y: Math.random() * heroCanvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+
+            // Click listener for Interactive Kinetic Shockwave
+            window.addEventListener('click', (e) => {
+                if (window.scrollY < window.innerHeight && heroCanvas) {
+                    const rect = heroCanvas.getBoundingClientRect();
+                    shockwaves.push({
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top,
+                        radius: 0,
+                        alpha: 1
+                    });
+                }
+            });
+
+            animateHeroNetwork();
+        }
+
+        function resizeHeroCanvas() {
+            const section = heroCanvas.parentElement;
+            heroCanvas.width = section.offsetWidth;
+            heroCanvas.height = section.offsetHeight;
+        }
+
+        function animateHeroNetwork() {
+            if(!heroCtx) return;
+            
+            // Performance optimization: Pause off-screen rendering
+            if (window.scrollY > window.innerHeight + 100) {
+                requestAnimationFrame(animateHeroNetwork);
+                return;
+            }
+
+            heroCtx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+            heroCtx.globalCompositeOperation = 'screen';
+            
+            window.scrollVelocityY = window.scrollVelocityY || 0;
+            window.scrollVelocityY *= 0.85; 
+
+            // Draw and update shockwaves
+            for (let i = shockwaves.length - 1; i >= 0; i--) {
+                let sw = shockwaves[i];
+                heroCtx.beginPath();
+                heroCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+                heroCtx.strokeStyle = `rgba(255, 51, 51, ${sw.alpha * 0.8})`;
+                heroCtx.lineWidth = 3;
+                heroCtx.stroke();
+                
+                // Outer subtle glow
+                heroCtx.beginPath();
+                heroCtx.arc(sw.x, sw.y, sw.radius + 15, 0, Math.PI * 2);
+                heroCtx.strokeStyle = `rgba(255, 255, 255, ${sw.alpha * 0.2})`;
+                heroCtx.lineWidth = 1;
+                heroCtx.stroke();
+
+                sw.radius += 12;
+                sw.alpha -= 0.02;
+
+                if (sw.alpha <= 0) {
+                    shockwaves.splice(i, 1);
+                }
+            }
+
+            heroParticles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy - (window.scrollVelocityY * 0.05); // Subtle warp on scroll
+
+                // Affect particles with shockwaves (push outward)
+                shockwaves.forEach(sw => {
+                    let dx = p.x - sw.x;
+                    let dy = p.y - sw.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (Math.abs(dist - sw.radius) < 25) {
+                        p.vx += (dx / dist) * 4 * sw.alpha;
+                        p.vy += (dy / dist) * 4 * sw.alpha;
+                    }
+                });
+
+                // Screen Wrap
+                if(p.x < 0) p.x = heroCanvas.width;
+                if(p.x > heroCanvas.width) p.x = 0;
+                if(p.y < 0) p.y = heroCanvas.height;
+                if(p.y > heroCanvas.height) p.y = 0;
+
+                const rect = heroCanvas.getBoundingClientRect();
+                const cMouseX = mouseX - rect.left; 
+                const cMouseY = mouseY - rect.top;
+                const dx = cMouseX - p.x; 
+                const dy = cMouseY - p.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                // Mouse interaction - dodging and drawing connection
+                if(dist < 150 && window.scrollY < window.innerHeight) {
+                    heroCtx.beginPath();
+                    heroCtx.strokeStyle = `rgba(255, 51, 51, ${0.4 * (1 - dist/150)})`;
+                    heroCtx.lineWidth = 1.2;
+                    heroCtx.moveTo(p.x, p.y);
+                    heroCtx.lineTo(cMouseX, cMouseY);
+                    heroCtx.stroke();
+                    
+                    const force = (150 - dist) / 150;
+                    p.vx -= (dx / dist) * force * 0.03;
+                    p.vy -= (dy / dist) * force * 0.03;
+                }
+
+                // Speed Limit Stabilization
+                const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                if (currentSpeed > 0.8) {
+                    p.vx = (p.vx / currentSpeed) * 0.8;
+                    p.vy = (p.vy / currentSpeed) * 0.8;
+                } else if (currentSpeed < 0.1 && dist >= 150) {
+                    p.vx += (Math.random() - 0.5) * 0.01;
+                    p.vy += (Math.random() - 0.5) * 0.01;
+                }
+
+                // Draw Network Lines
+                for(let j=index+1; j<heroParticles.length; j++) {
+                    const p2 = heroParticles[j];
+                    const dist2 = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
+                    
+                    if(dist2 < 90) { 
+                        heroCtx.beginPath();
+                        heroCtx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - dist2/90)})`;
+                        heroCtx.lineWidth = 0.8;
+                        heroCtx.moveTo(p.x, p.y);
+                        heroCtx.lineTo(p2.x, p2.y);
+                        heroCtx.stroke();
+                    }
+                }
+                
+                // Draw Particle Node
+                heroCtx.beginPath();
+                if (Math.abs(window.scrollVelocityY) > 2) {
+                    heroCtx.ellipse(p.x, p.y, p.size * 0.5, p.size + Math.abs(window.scrollVelocityY) * 0.05, 0, 0, Math.PI * 2);
+                } else {
+                    heroCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                }
+                
+                heroCtx.fillStyle = `rgba(255, 255, 255, 0.7)`; 
+                heroCtx.fill();
+            });
+            
+            heroCtx.globalCompositeOperation = 'source-over';
+            requestAnimationFrame(animateHeroNetwork);
+        }
+
+        /* === AI CANVAS PARTICLES (SECTION 2) === */
+        const canvas = document.getElementById('ai-canvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let particles = [];
+
+        function initCanvas() {
+            if(!canvas) return;
+            resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+            
+            // Increased from 60 to 80 for a slightly denser background
+            for(let i=0; i<80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+            animateCanvas();
+        }
+
+        function resizeCanvas() {
+            const section = canvas.parentElement;
+            canvas.width = section.offsetWidth; canvas.height = section.offsetHeight;
+        }
+
+        function animateCanvas() {
+            if(!ctx) return;
+            
+            // Performance optimization: Pause off-screen rendering
+            const sectionRect = canvas.parentElement.getBoundingClientRect();
+            if (sectionRect.top > window.innerHeight || sectionRect.bottom < 0) {
+                requestAnimationFrame(animateCanvas);
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const mouseInteractionRadius = 150;
+
+            particles.forEach((p, index) => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                const rect = canvas.getBoundingClientRect();
+                const cMouseX = mouseX - rect.left; const cMouseY = mouseY - rect.top;
+                const dx = cMouseX - p.x; const dy = cMouseY - p.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if(dist < mouseInteractionRadius && window.scrollY > window.innerHeight * 0.5) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(255, 51, 51, ${1 - dist/mouseInteractionRadius})`;
+                    ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(cMouseX, cMouseY); ctx.stroke();
+                    p.vx += dx * 0.0001; p.vy += dy * 0.0001;
+                }
+
+                for(let j=index+1; j<particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist2 = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
+                    if(dist2 < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - dist2/100)})`;
+                        ctx.lineWidth = 0.5; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                    }
+                }
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'; ctx.fill();
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+
+        /* === VELVET FABRIC CANVAS BACKGROUNDS === */
+        const velvetCanvases = document.querySelectorAll('.velvet-bg');
+        let vTime = 0;
+
+        function initVelvet() {
+            if(velvetCanvases.length === 0) return;
+            resizeVelvet();
+            window.addEventListener('resize', resizeVelvet);
+            animateVelvet();
+        }
+
+        function resizeVelvet() {
+            velvetCanvases.forEach(canvas => {
+                const section = canvas.parentElement;
+                canvas.width = section.offsetWidth;
+                canvas.height = section.offsetHeight;
+            });
+        }
+
+        function animateVelvet() {
+            vTime += 0.008; // Wind speed mapping
+            
+            velvetCanvases.forEach(canvas => {
+                // Performance optimization: Pause off-screen rendering per canvas
+                const sectionRect = canvas.parentElement.getBoundingClientRect();
+                if (sectionRect.top > window.innerHeight || sectionRect.bottom < 0) return;
+                
+                const vCtx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+
+                // Deep black background layer
+                vCtx.fillStyle = '#010101';
+                vCtx.fillRect(0, 0, width, height);
+
+                // OPTIMIZED: Reduced fold count for cleaner design and better FPS
+                const numFolds = 6;
+                const foldWidth = width / (numFolds - 2);
+
+                for (let i = -2; i < numFolds + 1; i++) {
+                    const baseX = i * foldWidth;
+                    const nextBaseX = (i + 1) * foldWidth;
+
+                    vCtx.beginPath();
+                    
+                    // Wind oscillation math for left edge of fold
+                    let x0_top = baseX + Math.sin(vTime + i * 0.6) * 100;
+                    let x0_mid1 = baseX + Math.sin(vTime * 0.8 + i * 0.5 + 1) * 120;
+                    let x0_mid2 = baseX + Math.sin(vTime * 1.1 + i * 0.4 + 2) * 140;
+                    let x0_bot = baseX + Math.sin(vTime * 0.9 + i * 0.6 + 3) * 100;
+
+                    // Wind oscillation math for right edge of fold
+                    let x1_top = nextBaseX + Math.sin(vTime + (i+1) * 0.6) * 100;
+                    let x1_mid1 = nextBaseX + Math.sin(vTime * 0.8 + (i+1) * 0.5 + 1) * 120;
+                    let x1_mid2 = nextBaseX + Math.sin(vTime * 1.1 + (i+1) * 0.4 + 2) * 140;
+                    let x1_bot = nextBaseX + Math.sin(vTime * 0.9 + (i+1) * 0.6 + 3) * 100;
+
+                    vCtx.moveTo(x0_top, 0);
+                    vCtx.bezierCurveTo(x0_mid1, height/3, x0_mid2, 2*height/3, x0_bot, height);
+                    vCtx.lineTo(x1_bot, height);
+                    vCtx.bezierCurveTo(x1_mid2, 2*height/3, x1_mid1, height/3, x1_top, 0);
+                    vCtx.closePath();
+
+                    // Velvet Sheen Gradient: Simulates rich lighting reflecting off fabric folds
+                    const gradient = vCtx.createLinearGradient(x0_top, 0, x1_top, 0);
+                    
+                    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+                    gradient.addColorStop(0.3, 'rgba(10, 5, 5, 1)');
+                    gradient.addColorStop(0.5, 'rgba(35, 8, 8, 1)'); // Dark velvet red highlight
+                    gradient.addColorStop(0.7, 'rgba(10, 5, 5, 1)');
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+
+                    vCtx.fillStyle = gradient;
+                    vCtx.fill();
+                }
+            });
+
+            requestAnimationFrame(animateVelvet);
+        }
+
+        /* === DARK NEON NEURONS CANVAS BACKGROUND (POPULAR WORK SECTION) === */
+        const neuronCanvas = document.getElementById('neuron-canvas');
+        const nCtx = neuronCanvas ? neuronCanvas.getContext('2d') : null;
+        let neurons = [];
+
+        function initNeurons() {
+            if(!neuronCanvas) return;
+            resizeNeurons();
+            window.addEventListener('resize', resizeNeurons);
+            
+            // OPTIMIZED: Reduced neuron count to 35 for perfect 60fps performance
+            for(let i=0; i<35; i++) {
+                neurons.push({
+                    x: Math.random() * neuronCanvas.width,
+                    y: Math.random() * neuronCanvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 1.5 + 0.5,
+                    pulse: Math.random() * Math.PI * 2,
+                    pulseSpeed: Math.random() * 0.05 + 0.02
+                });
+            }
+            animateNeurons();
+        }
+
+        function resizeNeurons() {
+            const section = neuronCanvas.parentElement;
+            neuronCanvas.width = section.offsetWidth;
+            neuronCanvas.height = section.offsetHeight;
+        }
+
+        function animateNeurons() {
+            if(!nCtx) return;
+            
+            // Performance optimization
+            const sectionRect = neuronCanvas.parentElement.getBoundingClientRect();
+            if (sectionRect.top > window.innerHeight || sectionRect.bottom < 0) {
+                requestAnimationFrame(animateNeurons);
+                return;
+            }
+
+            nCtx.clearRect(0, 0, neuronCanvas.width, neuronCanvas.height);
+            
+            // Dark base layer
+            nCtx.fillStyle = '#030303';
+            nCtx.fillRect(0, 0, neuronCanvas.width, neuronCanvas.height);
+
+            nCtx.globalCompositeOperation = 'screen';
+
+            neurons.forEach((n, index) => {
+                n.x += n.vx;
+                n.y += n.vy;
+                n.pulse += n.pulseSpeed;
+
+                // Screen Wrap
+                if(n.x < 0) n.x = neuronCanvas.width;
+                if(n.x > neuronCanvas.width) n.x = 0;
+                if(n.y < 0) n.y = neuronCanvas.height;
+                if(n.y > neuronCanvas.height) n.y = 0;
+
+                // Mouse interaction - slight dodging for biological feel
+                const cMouseX = mouseX - sectionRect.left;
+                const cMouseY = mouseY - sectionRect.top;
+                const dx = cMouseX - n.x;
+                const dy = cMouseY - n.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (dist < 100 && window.scrollY >= sectionRect.top) {
+                    n.x -= (dx / dist) * 0.5;
+                    n.y -= (dy / dist) * 0.5;
+                }
+
+                // Draw Synapses (Connections)
+                for(let j=index+1; j<neurons.length; j++) {
+                    const n2 = neurons[j];
+                    const dist2 = Math.sqrt(Math.pow(n.x - n2.x, 2) + Math.pow(n.y - n2.y, 2));
+                    
+                    // OPTIMIZED: Reduced connection distance to handle high density efficiently
+                    if(dist2 < 80) {
+                        nCtx.beginPath();
+                        const opacity = 1 - (dist2 / 80);
+                        // Neon red/pink synapse
+                        nCtx.strokeStyle = `rgba(255, 51, 51, ${opacity * 0.6})`;
+                        nCtx.lineWidth = 0.8;
+                        nCtx.moveTo(n.x, n.y);
+                        
+                        // Add slight curve for organic neuron feel
+                        const cpX = (n.x + n2.x) / 2 + (Math.sin(n.pulse) * 15);
+                        const cpY = (n.y + n2.y) / 2 + (Math.cos(n2.pulse) * 15);
+                        
+                        nCtx.quadraticCurveTo(cpX, cpY, n2.x, n2.y);
+                        nCtx.stroke();
+                    }
+                }
+
+                // Draw Neuron Node
+                nCtx.beginPath();
+                const currentRadius = n.radius + Math.sin(n.pulse) * 1.5;
+                nCtx.arc(n.x, n.y, Math.max(0.5, currentRadius), 0, Math.PI * 2);
+                
+                // Neon Glow
+                nCtx.shadowBlur = 8;
+                nCtx.shadowColor = '#ff3333';
+                nCtx.fillStyle = '#ffffff';
+                nCtx.fill();
+                
+                // Reset shadow for next draws
+                nCtx.shadowBlur = 0;
+            });
+            
+            nCtx.globalCompositeOperation = 'source-over';
+
+            requestAnimationFrame(animateNeurons);
+        }
+
+    </script>
+</body>
+</html>
